@@ -26,17 +26,17 @@ cd $BUILD_DIR
 
 mkdir -p bin
 mkdir -p packages
-mkdir -p include
-mkdir -p lib
+mkdir -p .heroku/vendor/include
+mkdir -p .heroku/vendor/lib
 
 echo "-----> Copying lua to bin"
 cp "$OPT_DIR/$STACK/lua" "bin/"
 
 echo "-----> Copying lua headers"
-cp $INCLUDE_DIR/* "include/"
+cp $INCLUDE_DIR/* ".heroku/vendor/include/"
 
 echo "-----> Copying lua libraries"
-cp "$LIB_DIR/liblua.a" "lib/"
+cp "$LIB_DIR/liblua.a" ".heroku/vendor/lib/"
 
 echo "-----> Installing packages"
 
@@ -44,7 +44,6 @@ SITE_CONFIG="$OPT_DIR/luarocks/luarocks/site_config.lua"
 
 if [ "$ENV" != "local" ]; then
   export PATH=$OPT_DIR/$STACK:$PATH
-  export CFLAGS="$CFLAGS -I$BUILD_DIR/include -L$BUILD_DIR/lib"
   echo "site_config.LUA_INCDIR=[[$OPT_DIR/../include]]" >> $SITE_CONFIG
   echo "site_config.LUA_LIBDIR=[[$OPT_DIR/../lib/$STACK/]]" >> $SITE_CONFIG
 else
