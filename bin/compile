@@ -17,6 +17,7 @@ function indent() {
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 OPT_DIR=$(cd "$BIN_DIR/../opt"; pwd)
+INCLUDE_DIR=$(cd "$BIN_DIR/../include"; pwd)
 
 LUA=lua
 
@@ -24,9 +25,13 @@ cd $BUILD_DIR
 
 mkdir -p bin
 mkdir -p packages
+mkdir -p include
 
 echo "-----> Copying lua to bin"
 cp "$OPT_DIR/$STACK/lua" "bin/"
+
+echo "-----> Copying lua headers"
+cp "$INCLUDE_DIR/*" "include/"
 
 echo "-----> Installing packages"
 
@@ -34,6 +39,7 @@ SITE_CONFIG="$OPT_DIR/luarocks/luarocks/site_config.lua"
 
 if [ "$ENV" != "local" ]; then
   export PATH=$OPT_DIR/$STACK:$PATH
+  export CFLAGS="$CFLAGS -L$BUILD_DIR/include"
   echo "site_config.LUA_INCDIR=[[$OPT_DIR/../include]]" >> $SITE_CONFIG
   echo "site_config.LUA_LIBDIR=[[$OPT_DIR/../lib/$STACK/]]" >> $SITE_CONFIG
 else
@@ -55,4 +61,3 @@ if [[ -z "$ROCKSPEC" ]]; then
 fi
 
 $LUA "$OPT_DIR/prepare.lua" $ROCKSPEC $OPT_DIR 2>&1 | indent
-
