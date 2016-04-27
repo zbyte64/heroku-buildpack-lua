@@ -31,7 +31,7 @@ echo "-----> Copying lua to bin"
 cp "$OPT_DIR/$STACK/lua" "bin/"
 
 echo "-----> Copying lua headers"
-cp "$INCLUDE_DIR/*" "include/"
+cp $INCLUDE_DIR/* "include/"
 
 echo "-----> Installing packages"
 
